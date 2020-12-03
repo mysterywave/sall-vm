@@ -126,7 +126,7 @@ void mov8##T() {\
 #define OUT(T,Y,Z) \
 void out##T() {\
     PRINTF("out " STR8_##Y " " STR8_##Z "\n", INPUT8_STR_##Y(0), INPUT8_STR_##Z(INPUT8LEN_##Y));\
-    printf("0x%.2X\n",INPUT8_##Y(0));\
+    putchar(INPUT8_##Y(0));\
     reg[0] += 1 + INPUT8LEN_##Y + INPUT8LEN_##Z;\
 }
 #define OPERATORS(X,Y) \

@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include "vm.h"
+#include "debug.h"
 
 unsigned int fileLength;
 
@@ -26,15 +27,15 @@ int main(int argc, char *argv[]) {
         const char *filename = argv[1];
         unsigned char *file = readFile(filename);
         if(file) {
-            printf("======== File Contents ========");
+            PRINTF("======== File Contents ========");
             for(int i = 0; i < fileLength; i++) {
                 if(i % 16 == 0) {
-                    printf("\n%04X\t", i);
+                    PRINTF("\n%04X\t", i);
                 }
-                printf("%.2X ", file[i]);
+                PRINTF("%.2X ", file[i]);
             }
-            printf("\n");
-            printf("\n");
+            PRINTF("\n");
+            PRINTF("\n");
             ram = calloc(1, 0x10000);
             memcpy(ram, file, fileLength);
             start();
