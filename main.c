@@ -27,6 +27,11 @@ int main(int argc, char *argv[]) {
         const char *filename = argv[1];
         unsigned char *file = readFile(filename);
         if(file) {
+            output_file = fopen("vmlog.txt", "w");
+            if(output_file == NULL) {
+                printf("Can't open log file.\n");
+                exit(0);
+            }
             PRINTF("======== File Contents ========");
             for(int i = 0; i < fileLength; i++) {
                 if(i % 16 == 0) {

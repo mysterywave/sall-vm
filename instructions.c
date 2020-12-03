@@ -2,6 +2,7 @@
 #include "vm.h"
 
 #include <stdio.h>
+#include <ncurses.h>
 
 #define arg(n) ram[reg[0] + n + 1]
 #define combine(a, b) (a << 8) | b
@@ -25,7 +26,7 @@ char *register_name(int i) {
 
 void end() {
     PRINTF("end\n");
-    cleanup();
+    cleanup(-1);
 }
 
 uint8_t screenOutputBuffer[3];
@@ -126,7 +127,7 @@ void mov8##T() {\
 #define OUT(T,Y,Z) \
 void out##T() {\
     PRINTF("out " STR8_##Y " " STR8_##Z "\n", INPUT8_STR_##Y(0), INPUT8_STR_##Z(INPUT8LEN_##Y));\
-    putchar(INPUT8_##Y(0));\
+    addch(INPUT8_##Y(0));\
     reg[0] += 1 + INPUT8LEN_##Y + INPUT8LEN_##Z;\
 }
 #define OPERATORS(X,Y) \
@@ -174,8 +175,9 @@ void push8##T() {\
 void pop8##T() {\
     PRINTF("pop8 " STR_##Y "\n", INPUT_STR_##Y(0));\
     reg[1]--;\
+    int inc = arg(0) != 0;\
     MOV8_OUTPUT_##Y(0, ram[reg[1]]);\
-    reg[0] += 1 + INPUTLEN_##Y;\
+    if(inc) {reg[0] += 1 + INPUTLEN_##Y;}\
 }
 #define PEEK8(T,Y) \
 void peek8##T() {\
@@ -195,8 +197,9 @@ void push##T() {\
 void pop##T() {\
     PRINTF("pop " STR_##Y "\n", INPUT_STR_##Y(0));\
     reg[1] -= 2;\
+    int inc = arg(0) != 0;\
     OUTPUT_##Y(0, combine(ram[reg[1]], ram[reg[1] + 1]));\
-    reg[0] += 1 + INPUTLEN_##Y;\
+    if(inc) {reg[0] += 1 + INPUTLEN_##Y;}\
 }
 #define PEEK(T,Y) \
 void peek##T() {\

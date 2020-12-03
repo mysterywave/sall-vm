@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 void start();
-void cleanup();
+void cleanup(int signal);
 
 void set_pixel(int x, int y, uint8_t pixel);
 void updateDisplay();
